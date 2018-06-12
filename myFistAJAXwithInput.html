@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="mybtn">Жми</button>
+    <input type="text" id="input">
+    <div class="wrapper"></div>
+</body>
+    <script>
+
+        let mybtn = document.querySelector('#mybtn');
+        let input = document.querySelector('#input');
+        let wrap = document.querySelector('.wrapper');
+        
+                
+        
+        let url1 = "https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json"
+        function getAjax(url){
+            return new Promise(function(resolve, reject){
+                let xhr = new XMLHttpRequest();
+
+                xhr.open('GET', url, true);
+                xhr.responseType = 'json';
+                
+                xhr.addEventListener('load', function(){
+                   resolve(xhr.response);
+                   
+                });
+                xhr.addEventListener('error', function(){
+                    reject();
+                });
+                xhr.send();
+                
+            });
+        };
+        
+        input.addEventListener('input', function(){
+            if ( !document.createRange ) {
+		          node.innerHTML = "";
+	       }
+	       else {
+
+                  var tmpRange = document.createRange(); // создаем рэндж
+                  tmpRange.selectNodeContents(wrap); // выбираем содержимое контейнера, если надо и контейнер то selectNode
+                  tmpRange.deleteContents(); //Метод deleteContents удаляет всё содержимое объекта Range
+
+                  tmpRange.detach(); // Метод detach извлекает текущий объект из DOM, так что на него больше нельзя сослаться.
+	       };
+
+        });
+        
+        
+        input.addEventListener('input', function(){
+           getAjax(url1).then(response =>{
+               let arrayAjax = ArrToABC(response);
+               addElem(arrayAjax);
+           }); 
+        });
+        
+        function addElem(arr){
+            let inputVal = document.getElementById('input').value;
+            arr.forEach(function(elem){
+                if (elem.indexOf(inputVal) !== -1){
+                    let div = document.createElement('div');
+                    wrap.appendChild(div);
+                    div.innerHTML = elem;
+                };
+                
+                
+            });
+            
+        
+        function ArrToABC(arrFromAjax){
+            let arr = arrFromAjax;
+            let arrPush = [];
+            
+
+            for({name} of arr){
+                arrPush.push(name);
+            };
+            
+            arrPush.sort();
+            return arrPush;
+        };
+        
+        
+        
+    </script>
+</html>
